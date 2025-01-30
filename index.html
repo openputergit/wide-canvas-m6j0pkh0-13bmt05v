@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Billing Dashboard</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function BillingDashboard() {
+            const [bills, setBills] = React.useState([
+                { id: 'BILL-001', patient: 'John Smith', type: 'OPD', date: '2023-11-15', amount: 1500, status: 'Paid' },
+                { id: 'BILL-002', patient: 'Sarah Johnson', type: 'IPD', date: '2023-11-14', amount: 25000, status: 'Pending' },
+                { id: 'BILL-003', patient: 'Mike Brown', type: 'Lab', date: '2023-11-13', amount: 3500, status: 'Paid' },
+                { id: 'BILL-004', patient: 'Emily Davis', type: 'Pharmacy', date: '2023-11-12', amount: 2000, status: 'Processing' }
+            ]);
+
+            const [searchTerm, setSearchTerm] = React.useState('');
+            const [filterType, setFilterType] = React.useState('All');
+
+            const filteredBills = bills.filter(bill => {
+                return bill.patient.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (filterType === 'All' || bill.type === filterType);
+            });
+
+            return (
+                <div className="p-6 max-w-7xl mx-auto">
+                    {/* Header */}
+                    <div className="flex justify-between items-center mb-8">
+                        <h1 className="text-2xl font-bold">Billing Dashboard</h1>
+                        <div className="flex items-center gap-4">
+                            <span className="text-gray-600">Dr. John Doe</span>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                + New Bill
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-green-100 p-3 rounded-full">
+                                    <i className="bi bi-currency-dollar text-green-500"></i>
+                                </div>
+                                <div>
+                                    <p className="text-gray-500">Total Revenue</p>
+                                    <h3 className="text-2xl font-bold">₹1,25,000</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-blue-100 p-3 rounded-full">
+                                    <i className="bi bi-file-text text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <p className="text-gray-500">Pending Bills</p>
+                                    <h3 className="text-2xl font-bold">45</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-yellow-100 p-3 rounded-full">
+                                    <i className="bi bi-clock text-yellow-500"></i>
+                                </div>
+                                <div>
+                                    <p className="text-gray-500">Today's Bills</p>
+                                    <h3 className="text-2xl font-bold">12</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-purple-100 p-3 rounded-full">
+                                    <i className="bi bi-people text-purple-500"></i>
+                                </div>
+                                <div>
+                                    <p className="text-gray-500">Active Patients</p>
+                                    <h3 className="text-2xl font-bold">89</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <button className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center gap-2">
+                                <i className="bi bi-plus-circle text-blue-500 text-2xl"></i>
+                                <span>New OPD Bill</span>
+                            </button>
+                            <button className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center gap-2">
+                                <i className="bi bi-hospital text-green-500 text-2xl"></i>
+                                <span>IPD Bill</span>
+                            </button>
+                            <button className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center gap-2">
+                                <i className="bi bi-flask text-purple-500 text-2xl"></i>
+                                <span>Lab Bill</span>
+                            </button>
+                            <button className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center gap-2">
+                                <i className="bi bi-capsule text-red-500 text-2xl"></i>
+                                <span>Pharmacy Bill</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Recent Bills */}
+                    <div>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-semibold">Recent Bills</h2>
+                            <div className="flex gap-4">
+                                <input
+                                    type="text"
+                                    placeholder="Search bills..."
+                                    className="px-4 py-2 border rounded-lg"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <select
+                                    className="px-4 py-2 border rounded-lg"
+                                    value={filterType}
+                                    onChange={(e) => setFilterType(e.target.value)}
+                                >
+                                    <option value="All">All</option>
+                                    <option value="OPD">OPD</option>
+                                    <option value="IPD">IPD</option>
+                                    <option value="Lab">Lab</option>
+                                    <option value="Pharmacy">Pharmacy</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bill No</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {filteredBills.map((bill) => (
+                                        <tr key={bill.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap">{bill.id}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{bill.patient}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{bill.type}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{bill.date}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">₹{bill.amount}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                    bill.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                                                    bill.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    'bg-blue-100 text-blue-800'
+                                                }`}>
+                                                    {bill.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="flex gap-2">
+                                                    <button className="text-blue-600 hover:text-blue-900">
+                                                        <i className="bi bi-eye"></i>
+                                                    </button>
+                                                    <button className="text-green-600 hover:text-green-900">
+                                                        <i className="bi bi-printer"></i>
+                                                    </button>
+                                                    <button className="text-red-600 hover:text-red-900">
+                                                        <i className="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<BillingDashboard />, document.getElementById('root'));
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
